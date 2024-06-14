@@ -1,1 +1,25 @@
-<p>poke-login works!</p>
+<div class="container">
+  <div class="column">
+    <div class="col-md-6 offset-md-3">
+      <h1>Login</h1>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+          <mat-label>E-mail</mat-label>
+          <input matInput formControlName="email" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Password</mat-label>
+          <input matInput formControlName="password" />
+        </mat-form-field>
+        <button
+          type="submit"
+          mat-flat-button
+          color="primary"
+          [disabled]="false"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
