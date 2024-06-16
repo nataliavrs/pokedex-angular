@@ -1,3 +1,7 @@
-import { createAction } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
+import { AuthState } from './auth.state';
 
-export const login = createAction('[Auth] Login');
+export const login = createAction(
+  '[Auth] Login',
+  props<{ request: AuthState }>()
+);
