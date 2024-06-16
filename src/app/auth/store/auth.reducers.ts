@@ -4,13 +4,18 @@ import { AuthState } from './auth.state';
 
 export const initialState: AuthState = {
   isLoggedIn: false,
+  user: {
+    email: '',
+    password: '',
+  },
 };
 
 const authReducer = createReducer(
   initialState,
-  on(login, (state) => ({
+  on(login, (state, { request }) => ({
     ...state,
     isLoggedIn: true,
+    user: request.user,
   }))
 );
 
