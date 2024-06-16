@@ -106,3 +106,14 @@ app-root {
   pointer-events: none;
   opacity: 0.5;
 }
+
+// ******** Material Design ********
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  background-color: #dc3545 !important;
+}
+
+.mat-mdc-snack-bar-container {
+  .mdc-button__label {
+    color: #e6919aed !important;
+  }
+}

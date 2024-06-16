@@ -6,18 +6,48 @@
         <mat-form-field>
           <mat-label>E-mail</mat-label>
           <input matInput formControlName="email" />
+          <mat-error>Please enter a valid email address</mat-error>
         </mat-form-field>
+
         <mat-form-field>
-          <mat-label>Password</mat-label>
-          <input matInput formControlName="password" />
+          <mat-label>Enter your password</mat-label>
+          <input
+            matInput
+            formControlName="password"
+            [type]="getPasswordVisibility ? 'password' : 'text'"
+          />
+          <mat-error>Please enter a valid password</mat-error>
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="getPasswordVisibility"
+          >
+            <mat-icon>{{
+              getPasswordVisibility ? "visibility_off" : "visibility"
+            }}</mat-icon>
+          </button>
         </mat-form-field>
+
         <button
+          *ngIf="!(isUserLoggedIn$ | async)"
           type="submit"
           mat-flat-button
           color="primary"
-          [disabled]="false"
+          [disabled]="this.loginForm.invalid"
         >
-          Submit
+          Log in
+        </button>
+        <button
+          *ngIf="isUserLoggedIn$ | async"
+          type="button"
+          (click)="logOutUser()"
+          mat-flat-button
+          color="primary"
+        >
+          Log out
         </button>
       </form>
     </div>

@@ -15,7 +15,7 @@ import { User } from '../../auth/types/user.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokeDashboardComponent {
-  user$: Observable<User> = this.store.select(selectUser);
+  user$: Observable<User | null> = this.store.select(selectUser);
 
   constructor(private store: Store<PokeState>) {}
 }

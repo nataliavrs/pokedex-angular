@@ -8,14 +8,16 @@ export const initialState: AuthState = {
     email: '',
     password: '',
   },
+  isTokenExpired: false,
 };
 
 const authReducer = createReducer(
   initialState,
   on(login, (state, { request }) => ({
     ...state,
-    isLoggedIn: true,
+    isLoggedIn: request.isLoggedIn,
     user: request.user,
+    isTokenExpired: request.isTokenExpired,
   }))
 );
 

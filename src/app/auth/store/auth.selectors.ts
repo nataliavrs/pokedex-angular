@@ -9,6 +9,11 @@ export const selectLoggedInStatus = createSelector(
   (state: AuthState) => state.isLoggedIn
 );
 
+export const selectIsTokenExpired = createSelector(
+  selectAuthFeature,
+  (state: AuthState) => state.isTokenExpired
+);
+
 export const selectUser = createSelector(
   selectAuthFeature,
   (state: AuthState) => state.user
