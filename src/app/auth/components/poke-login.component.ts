@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import { PokeState } from '../../store/app.state';
 import { login } from '../store/auth.actions';
 import { selectLoggedInStatus, selectUser } from '../store/auth.selectors';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'poke-login',
@@ -33,13 +34,13 @@ export class PokeLoginComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private store: Store<PokeState>
+    private store: Store<PokeState>,
+    private router: Router
   ) {}
 
   onSubmit() {
     // Validate form
     // Manage form errors
-    // Get user's information
     // Generate random token
     // Dispatch user's information and token to store
     const user = {
@@ -49,10 +50,10 @@ export class PokeLoginComponent {
     // Dispatch isLoggedIn to store
     // If valid
     this.store.dispatch(login({ request: { isLoggedIn: true, user: user } }));
-    // Navigate to dashboard
-    console.log('this.loginForm', this.loginForm.value);
     this.store.select(selectLoggedInStatus).subscribe((isLoggedIn) => {
       console.log('isLoggedIn', isLoggedIn);
     });
+    // Navigate to dashboard
+    this.router.navigateByUrl('dashboard');
   }
 }
