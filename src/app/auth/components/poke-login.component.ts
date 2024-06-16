@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Store } from '@ngrx/store';
 import { PokeState } from '../../store/app.state';
 import { login } from '../store/auth.actions';
-import { selectLoggedInStatus } from '../store/auth.selectors';
+import { selectLoggedInStatus, selectUser } from '../store/auth.selectors';
 
 @Component({
   selector: 'poke-login',
@@ -48,7 +48,7 @@ export class PokeLoginComponent {
     };
     // Dispatch isLoggedIn to store
     // If valid
-    this.store.dispatch(login({ request: { isLoggedIn: true } }));
+    this.store.dispatch(login({ request: { isLoggedIn: true, user: user } }));
     // Navigate to dashboard
     console.log('this.loginForm', this.loginForm.value);
     this.store.select(selectLoggedInStatus).subscribe((isLoggedIn) => {
