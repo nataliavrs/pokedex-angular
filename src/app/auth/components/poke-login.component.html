@@ -1,55 +1,45 @@
-<div class="container">
-  <div class="column">
-    <div class="col-md-6 offset-md-3">
-      <h1>Login</h1>
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <mat-form-field>
-          <mat-label>E-mail</mat-label>
-          <input matInput formControlName="email" />
-          <mat-error>Please enter a valid email address</mat-error>
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>Enter your password</mat-label>
-          <input
-            matInput
-            formControlName="password"
-            [type]="getPasswordVisibility ? 'password' : 'text'"
-          />
-          <mat-error>Please enter a valid password</mat-error>
-          <button
-            type="button"
-            mat-icon-button
-            matSuffix
-            (click)="togglePasswordVisibility()"
-            [attr.aria-label]="'Hide password'"
-            [attr.aria-pressed]="getPasswordVisibility"
-          >
-            <mat-icon>{{
-              getPasswordVisibility ? "visibility_off" : "visibility"
-            }}</mat-icon>
-          </button>
-        </mat-form-field>
-
-        <button
-          *ngIf="!(isUserLoggedIn$ | async)"
-          type="submit"
-          mat-flat-button
-          color="primary"
-          [disabled]="this.loginForm.invalid"
-        >
-          Log in
-        </button>
-        <button
-          *ngIf="isUserLoggedIn$ | async"
-          type="button"
-          (click)="logOutUser()"
-          mat-flat-button
-          color="primary"
-        >
-          Log out
-        </button>
-      </form>
+<h1>Login</h1>
+<!-- PrimeNG -->
+<div class="row gap-1">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <p-floatLabel>
+        <input
+          [ngClass]="{ 'ng-invalid': this.loginForm.get('email')?.invalid }"
+          pInputText
+          id="username"
+          formControlName="email"
+        />
+        <label for="username">Username</label>
+      </p-floatLabel>
+      <p-floatLabel>
+        <input
+          [ngClass]="{
+            'ng-invalid ng-dirty': this.loginForm.get('password')?.invalid
+          }"
+          pInputText
+          id="username"
+          formControlName="email"
+        />
+        <label for="username">Password</label>
+      </p-floatLabel>
     </div>
-  </div>
+
+    <div class="mt-15">
+      <p-button
+        *ngIf="!(isUserLoggedIn$ | async)"
+        type="submit"
+        label="Log in"
+        [disabled]="this.loginForm.invalid"
+      >
+      </p-button>
+    </div>
+
+    <p-button *ngIf="isUserLoggedIn$ | async" type="button" label="Log out">
+    </p-button>
+  </form>
+</div>
+
+<div class="card flex justify-content-center">
+  <p-toast />
 </div>

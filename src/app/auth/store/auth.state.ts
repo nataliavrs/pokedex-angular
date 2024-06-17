@@ -1,7 +1,7 @@
 import { User } from '../types/user.interface';
 
 export interface AuthState {
-  isLoggedIn: boolean;
   user: User | null;
+  isLoggedIn: boolean;
   isTokenExpired: boolean;
 }
