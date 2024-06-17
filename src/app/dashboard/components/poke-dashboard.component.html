@@ -1,2 +1,35 @@
-<h3>dashboard</h3>
-<h1 *ngIf="user$ | async as user">{{ user.email }}</h1>
+<div class="container">
+  <div class="sidebar">
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Profile</a></li>
+        <li><a href="#">List</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="main-content">
+    <div class="chart-container">
+      <div class="chart">
+        <div class="card">
+          <p-chart type="bar" [data]="barData" [options]="basicOptions" />
+        </div>
+      </div>
+      <div class="chart">
+        <div class="card">
+          <p-chart type="pie" [data]="barData" [options]="basicOptions" />
+        </div>
+      </div>
+      <div class="chart">
+        <div class="card">
+          <p-chart type="line" [data]="lineData" [options]="lineOptions" />
+        </div>
+      </div>
+      <div class="chart">
+        <div class="card">
+          <p-chart type="doughnut" [data]="barData" [options]="basicOptions" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
