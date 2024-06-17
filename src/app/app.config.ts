@@ -6,6 +6,7 @@ import { provideState, provideStore } from '@ngrx/store';
 import { provideHttpClient } from '@angular/common/http';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { authFeature } from './auth/store/auth.reducers';
+import { MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,5 +22,6 @@ export const appConfig: ApplicationConfig = {
       trace: false, // Disable trace for performance
       traceLimit: 75, // Limit trace to 75
     }),
+    MessageService,
   ],
 };

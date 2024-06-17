@@ -1,27 +1,20 @@
-<h1>Login</h1>
-<!-- PrimeNG -->
+<h1 class="mt-15">Login</h1>
 <div class="row gap-1">
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div class="row">
-      <p-floatLabel>
-        <input
-          [ngClass]="{ 'ng-invalid': this.loginForm.get('email')?.invalid }"
-          pInputText
-          id="username"
-          formControlName="email"
-        />
-        <label for="username">Username</label>
-      </p-floatLabel>
+    <div class="row" *ngIf="!(isUserLoggedIn$ | async)">
       <p-floatLabel>
         <input
           [ngClass]="{
-            'ng-invalid ng-dirty': this.loginForm.get('password')?.invalid
+            'ng-invalid': this.loginForm.get('email')?.invalid
           }"
           pInputText
-          id="username"
           formControlName="email"
         />
-        <label for="username">Password</label>
+        <label for="email">{{ LABELS.COMMON.USERNAME }}</label>
+      </p-floatLabel>
+      <p-floatLabel>
+        <p-password formControlName="password" [toggleMask]="true" />
+        <label for="password">{{ LABELS.COMMON.PASSWORD }}</label>
       </p-floatLabel>
     </div>
 
@@ -29,17 +22,17 @@
       <p-button
         *ngIf="!(isUserLoggedIn$ | async)"
         type="submit"
-        label="Log in"
+        label="{{ LABELS.COMMON.LOG_IN }}"
         [disabled]="this.loginForm.invalid"
       >
       </p-button>
+      <p-button
+        *ngIf="isUserLoggedIn$ | async"
+        type="button"
+        label="{{ LABELS.COMMON.LOG_OUT }}"
+        (click)="onLogOutUser()"
+      >
+      </p-button>
     </div>
-
-    <p-button *ngIf="isUserLoggedIn$ | async" type="button" label="Log out">
-    </p-button>
   </form>
-</div>
-
-<div class="card flex justify-content-center">
-  <p-toast />
 </div>

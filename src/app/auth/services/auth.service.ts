@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PokeState } from '../../store/app.state';
 import { Store } from '@ngrx/store';
 import { login } from '../store/auth.actions';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ export class AuthService {
   tokenKey = 'accessToken';
   turnOffLogOutTimer: boolean = false;
 
-  constructor(private store: Store<PokeState>) {}
+  constructor(private store: Store<PokeState>, private router: Router) {}
 
   /**
    * Logs in the user by generating a login token and storing it in the local storage.
@@ -63,11 +64,12 @@ export class AuthService {
               request: { isLoggedIn: false, user: null, isTokenExpired: true },
             })
           );
+          this.router.navigateByUrl('');
           resolve();
         } catch (error) {
           reject(error);
         }
-      }, 4000 || this.tokenValidityPeriod);
+      }, this.tokenValidityPeriod);
     });
   }
 
@@ -75,7 +77,7 @@ export class AuthService {
    * Generates a login token by creating a random string and concatenating it with itself.
    * @return {string} The generated login token.
    */
-  generateLoginToken() {
+  generateLoginToken(): string {
     const randomString = Math.random().toString(36).substring(2);
     return `${randomString}${randomString}`;
   }
