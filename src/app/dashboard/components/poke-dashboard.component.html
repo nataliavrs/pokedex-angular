@@ -8,30 +8,23 @@
       </ul>
     </nav>
   </div>
+
   <div class="main-content">
-    <div class="chart-container">
+    <div class="row space-around">
       <div class="chart">
-        <div class="card">
-          <p-chart type="doughnut" [data]="barData" [options]="{}" />
-        </div>
+        <p-chart type="doughnut" [data]="barData" [options]="{}" />
       </div>
       <div class="chart">
-        <div class="card">
-          <p-chart type="pie" [data]="barData" [options]="{}" />
-        </div>
+        <p-chart type="pie" [data]="barData" [options]="{}" />
       </div>
     </div>
 
-    <div class="column justify-center align-center">
-      <div class="">
-        <div class="">
-          <p-chart type="line" [data]="lineData" [options]="{}" />
-        </div>
+    <div class="row space-around">
+      <div class="chart small">
+        <p-chart type="line" [data]="lineData" [options]="{}" />
       </div>
-      <div class="">
-        <div class="">
-          <p-chart type="bar" [data]="barData" [options]="{}" />
-        </div>
+      <div class="chart small">
+        <p-chart type="bar" [data]="barData" [options]="{}" />
       </div>
     </div>
   </div>
