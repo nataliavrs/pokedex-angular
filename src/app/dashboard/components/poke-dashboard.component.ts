@@ -3,25 +3,30 @@ import { PokeState } from '../../store/app.state';
 import { Store } from '@ngrx/store';
 import { selectUser } from '../../auth/store/auth.selectors';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  forkJoin,
+  map,
+  of,
+  switchMap,
+  take,
+} from 'rxjs';
 import { User } from '../../auth/types/user.interface';
-import { DockModule } from 'primeng/dock';
 import { FormsModule } from '@angular/forms';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { SidebarModule } from 'primeng/sidebar';
 import { ChartModule } from 'primeng/chart';
+import {
+  BaseApiResponse,
+  EndPoints,
+  PokeHttpService,
+  PokemonTypeDetails,
+} from '../../shared/services/poke-http.service';
+import { ToasterService } from '../../shared/services/toaster.service';
 
 @Component({
   selector: 'poke-dashboard',
   standalone: true,
-  imports: [
-    DockModule,
-    RadioButtonModule,
-    CommonModule,
-    FormsModule,
-    SidebarModule,
-    ChartModule,
-  ],
+  imports: [CommonModule, FormsModule, ChartModule],
   templateUrl: './poke-dashboard.component.html',
   styleUrl: './poke-dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,17 +34,35 @@ import { ChartModule } from 'primeng/chart';
 export class PokeDashboardComponent {
   user$: Observable<User | null> = this.store.select(selectUser);
 
-  constructor(private store: Store<PokeState>) {}
-
   lineData: any;
   lineOptions: any;
-
   barData: any;
   basicOptions: any;
+  typesChart$!: Observable<any>;
+  totalTypes$!: Observable<number>;
+  options = {
+    plugins: {
+      datalabels: {
+        color: '#36A2EB',
+        // formatter: (value, context) => {
+        //   return context.chart.data.labels[context.dataIndex];
+        // },
+      },
+      legend: {
+        display: true,
+        position: 'top',
+      },
+    },
+  };
+
+  constructor(
+    private store: Store<PokeState>,
+    private pokeHttpService: PokeHttpService,
+    private toasterService: ToasterService
+  ) {}
 
   ngOnInit() {
-    this.initBarChart();
-    this.initLineChart();
+    this.getPokemonTypesChart();
   }
 
   initBarChart() {
@@ -181,4 +204,155 @@ export class PokeDashboardComponent {
       },
     };
   }
+
+  getGender() {
+    this.pokeHttpService
+      .get<PokemonData>('/gender', {}, true)
+      .pipe(
+        take(1),
+        map((res) => {
+          console.log(res);
+          return res;
+        }),
+        catchError((error) => {
+          console.log(error);
+          this.toasterService.showErrorMessage('Error getting gender');
+          return of(null);
+        })
+      )
+      .subscribe();
+  }
+
+  getPokemons() {
+    this.pokeHttpService
+      .get<PokemonData>('/pokemon', {}, true)
+      .pipe(
+        take(1),
+        map((res) => {
+          console.log(res);
+          return res;
+        }),
+        catchError((error) => {
+          console.log(error);
+          this.toasterService.showErrorMessage('Error getting gender');
+          return of(null);
+        })
+      )
+      .subscribe();
+  }
+
+  getPokemonTypesChart() {
+    this.typesChart$ = this.pokeHttpService
+      .get<BaseApiResponse>(`${EndPoints.baseUrl}/type`, {}, true)
+      .pipe(
+        take(1),
+        map((res) => {
+          console.log(res);
+          return res;
+        }),
+        switchMap((res) => {
+          const totalTypes = res.results.length;
+          console.log(totalTypes);
+
+          const responses = res.results.map(({ url }) => {
+            return this.pokeHttpService
+              .get<PokemonTypeDetails>(url, {}, true)
+              .pipe(
+                take(1),
+                map((res) => {
+                  console.log(res);
+                  return {
+                    pokemons: res.pokemon,
+                    name: res.name,
+                  };
+                })
+              );
+          });
+          return forkJoin(responses);
+        }),
+        map((res) => {
+          const labels = res.map(({ name }) => name);
+          const data = res.map(({ pokemons }) => pokemons.length);
+          // .sort((a, b) => b - a);
+          this.totalTypes$ = of(labels.length - 1);
+          const colors = this.generateColors(labels.length);
+          return {
+            labels,
+            datasets: [
+              {
+                label: 'Pokémons of this type',
+                data,
+                backgroundColor: colors.backgroundColor,
+                borderColor: colors.borderColor,
+                borderWidth: 1,
+              },
+            ],
+          };
+        }),
+        catchError((error) => {
+          console.log(error);
+          this.toasterService.showErrorMessage('Error getting gender');
+          return of(null);
+        })
+      );
+  }
+
+  private generateColors(count: number): {
+    backgroundColor: string[];
+    borderColor: string[];
+  } {
+    const backgroundColor: string[] = [];
+    const borderColor: string[] = [];
+
+    for (let i = 0; i < count; i++) {
+      const hue = ((i * 360) / count) % 360;
+      backgroundColor.push(`hsla(${hue}, 70%, 50%, 0.5)`);
+      borderColor.push(`hsl(${hue}, 50%, 50%)`);
+    }
+
+    return { backgroundColor, borderColor };
+  }
+}
+
+enum TYPES {
+  NORMAL = '1',
+  FIGHTING = '2',
+  FLYING = '3',
+  POISON = '4',
+  GROUND = '5',
+  ROCK = '6',
+  BUG = '7',
+  GHOST = '8',
+  STEEL = '9',
+  FIRE = '10',
+  WATER = '11',
+  GRASS = '12',
+  ELECTRIC = '13',
+  PSYCHIC = '14',
+  ICE = '15',
+  DRAGON = '16',
+  DARK = '17',
+  FAIRY = '18',
+}
+
+interface PokemonSpecies {
+  name: string;
+  url: string;
+}
+
+interface PokemonSpeciesDetails {
+  rate: number;
+  pokemon_species: PokemonSpecies;
+}
+
+interface RequiredForEvolution {
+  name: string;
+  url: string;
+}
+
+interface PokemonData {
+  id: number;
+  name: string;
+  pokemon_species_details: PokemonSpeciesDetails[];
+  required_for_evolution: RequiredForEvolution[];
 }

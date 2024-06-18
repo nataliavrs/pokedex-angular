@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="sidebar">
+  <div *ngIf="false" class="sidebar">
     <nav>
       <ul>
         <li><a href="#">Home</a></li>
@@ -9,23 +9,25 @@
     </nav>
   </div>
 
-  <div class="main-content">
-    <div class="row space-around">
-      <div class="chart">
-        <p-chart type="doughnut" [data]="barData" [options]="{}" />
-      </div>
-      <div class="chart">
-        <p-chart type="pie" [data]="barData" [options]="{}" />
+  <div class="">
+    <div class="">
+      <div *ngIf="typesChart$ | async as typesChart" class="chart">
+        <h3>Types of Pokémons</h3>
+        <h5>There are {{ totalTypes$ | async }} types of pokemons</h5>
+        <p-chart type="doughnut" [data]="typesChart" [options]="" />
       </div>
     </div>
 
-    <div class="row space-around">
-      <div class="chart small">
+    <!-- <div class="">
+       <div class="">
+        <p-chart type="pie" [data]="barData" [options]="{}" />
+      </div>
+      <div class="">
         <p-chart type="line" [data]="lineData" [options]="{}" />
       </div>
-      <div class="chart small">
+      <div class="">
         <p-chart type="bar" [data]="barData" [options]="{}" />
       </div>
-    </div>
+    </div> -->
   </div>
 </div>
