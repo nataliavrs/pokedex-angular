@@ -4,7 +4,7 @@
       <ul>
         <li><a href="#">Home</a></li>
         <li><a href="#">Profile</a></li>
-        <li><a href="#">List</a></li>
+        <li><a href="#">Settings</a></li>
       </ul>
     </nav>
   </div>
@@ -12,22 +12,25 @@
     <div class="chart-container">
       <div class="chart">
         <div class="card">
-          <p-chart type="bar" [data]="barData" [options]="basicOptions" />
+          <p-chart type="doughnut" [data]="barData" [options]="{}" />
         </div>
       </div>
       <div class="chart">
         <div class="card">
-          <p-chart type="pie" [data]="barData" [options]="basicOptions" />
+          <p-chart type="pie" [data]="barData" [options]="{}" />
         </div>
       </div>
-      <div class="chart">
-        <div class="card">
-          <p-chart type="line" [data]="lineData" [options]="lineOptions" />
+    </div>
+
+    <div class="column justify-center align-center">
+      <div class="">
+        <div class="">
+          <p-chart type="line" [data]="lineData" [options]="{}" />
         </div>
       </div>
-      <div class="chart">
-        <div class="card">
-          <p-chart type="doughnut" [data]="barData" [options]="basicOptions" />
+      <div class="">
+        <div class="">
+          <p-chart type="bar" [data]="barData" [options]="{}" />
         </div>
       </div>
     </div>

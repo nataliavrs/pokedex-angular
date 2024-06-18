@@ -38,6 +38,11 @@ export class PokeDashboardComponent {
   basicOptions: any;
 
   ngOnInit() {
+    this.initBarChart();
+    this.initLineChart();
+  }
+
+  initBarChart() {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
     const textColorSecondary = documentStyle.getPropertyValue(
@@ -98,6 +103,15 @@ export class PokeDashboardComponent {
         },
       },
     };
+  }
+
+  initLineChart() {
+    const documentStyle = getComputedStyle(document.documentElement);
+    const textColor = documentStyle.getPropertyValue('--text-color');
+    const textColorSecondary = documentStyle.getPropertyValue(
+      '--text-color-secondary'
+    );
+    const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     this.lineData = {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
