@@ -28,7 +28,6 @@ export class PokeHttpService {
       ? new HttpHeaders({ ...this.defaultHeaders, ...options.headers })
       : this.defaultHeaders;
     const mergedOptions = { ...options, headers };
-    // const fullUrl = `${EndPoints.baseUrl}${url}`;
 
     if (useCache && this.cache[url]) {
       const cachedData = this.getFromCache(url);
