@@ -252,8 +252,6 @@ export class PokeDashboardComponent {
         }),
         switchMap((res) => {
           const totalTypes = res.results.length;
-          console.log(totalTypes);
-
           const responses = res.results.map(({ url }) => {
             return this.pokeHttpService
               .get<PokemonTypeDetails>(url, {}, true)
@@ -271,11 +269,16 @@ export class PokeDashboardComponent {
           return forkJoin(responses);
         }),
         map((res) => {
-          const labels = res.map(({ name }) => name);
-          const data = res.map(({ pokemons }) => pokemons.length);
-          // .sort((a, b) => b - a);
-          this.totalTypes$ = of(labels.length - 1);
-          const colors = this.generateColors(labels.length);
+          const sortRes = res
+            .filter(({ name, pokemons }) => pokemons.length)
+            .sort((a, b) => b.pokemons.length - a.pokemons.length);
+          const data = sortRes.map((data) => data.pokemons.length);
+          const labels = sortRes.map((data) =>
+            this.upperCaseFirstLetter(data.name)
+          );
+
+          this.totalTypes$ = of(res.length);
+          const colors = this.generateColors(data.length);
           return {
             labels,
             datasets: [
@@ -284,7 +287,7 @@ export class PokeDashboardComponent {
                 data,
                 backgroundColor: colors.backgroundColor,
                 borderColor: colors.borderColor,
-                borderWidth: 1,
+                borderWidth: 2,
               },
             ],
           };
@@ -296,6 +299,16 @@ export class PokeDashboardComponent {
         })
       );
   }
+  upperCaseFirstLetter(name: string): string {
+    return name.slice(0, 1).toLocaleUpperCase() + name.slice(1).toLowerCase();
+  }
+
+  // Generations -> bar chart
+  // Genders -> pie chart
+  // Gender by generations -> Vertical Bar
+  // catch rate capture_rate:190 -> Higher catch rates mean that the Pokémon is easier to catch, up to a maximum of 255.
+  // /pokemon-species/1 base_happiness:50
+  // capture_rate:45
 
   private generateColors(count: number): {
     backgroundColor: string[];
