@@ -38,22 +38,16 @@ export class PokeDashboardComponent {
   lineOptions: any;
   barData: any;
   basicOptions: any;
-  typesChart$!: Observable<any>;
-  totalTypes$!: Observable<number>;
-  options = {
-    plugins: {
-      datalabels: {
-        color: '#36A2EB',
-        // formatter: (value, context) => {
-        //   return context.chart.data.labels[context.dataIndex];
-        // },
-      },
-      legend: {
-        display: true,
-        position: 'top',
-      },
-    },
-  };
+  pokemonTypesData$!: Observable<{
+    labels: string[];
+    datasets: {
+      label: string;
+      data: number[];
+      backgroundColor: string[];
+      borderColor: string[];
+      borderWidth: number;
+    }[];
+  } | null>;
 
   constructor(
     private store: Store<PokeState>,
@@ -242,23 +236,17 @@ export class PokeDashboardComponent {
   }
 
   getPokemonTypesChart() {
-    this.typesChart$ = this.pokeHttpService
+    this.pokemonTypesData$ = this.pokeHttpService
       .get<BaseApiResponse>(`${EndPoints.baseUrl}/type`, {}, true)
       .pipe(
         take(1),
-        map((res) => {
-          console.log(res);
-          return res;
-        }),
         switchMap((res) => {
-          const totalTypes = res.results.length;
           const responses = res.results.map(({ url }) => {
             return this.pokeHttpService
               .get<PokemonTypeDetails>(url, {}, true)
               .pipe(
                 take(1),
                 map((res) => {
-                  console.log(res);
                   return {
                     pokemons: res.pokemon,
                     name: res.name,
@@ -270,15 +258,14 @@ export class PokeDashboardComponent {
         }),
         map((res) => {
           const sortRes = res
-            .filter(({ name, pokemons }) => pokemons.length)
+            .filter(({ pokemons }) => pokemons.length)
             .sort((a, b) => b.pokemons.length - a.pokemons.length);
           const data = sortRes.map((data) => data.pokemons.length);
           const labels = sortRes.map((data) =>
             this.upperCaseFirstLetter(data.name)
           );
-
-          this.totalTypes$ = of(res.length);
           const colors = this.generateColors(data.length);
+
           return {
             labels,
             datasets: [
@@ -294,7 +281,9 @@ export class PokeDashboardComponent {
         }),
         catchError((error) => {
           console.log(error);
-          this.toasterService.showErrorMessage('Error getting gender');
+          this.toasterService.showErrorMessage(
+            'Error retrieving pokémon types'
+          );
           return of(null);
         })
       );

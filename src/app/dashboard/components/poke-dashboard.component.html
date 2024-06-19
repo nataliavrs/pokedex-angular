@@ -11,11 +11,10 @@
 
   <div class="">
     <div class="">
-      <div *ngIf="typesChart$ | async as typesChart" class="chart">
+      <div *ngIf="pokemonTypesData$ | async as types" class="chart">
         <h3>Types of Pokémons</h3>
-        <h5>There are {{ totalTypes$ | async }} types of pokémons</h5>
-        <p-chart type="doughnut" [data]="typesChart" [options]="" />
-        <h6>Types with no pokémons have been filtered out</h6>
+        <h5>There are {{ types.datasets[0].data.length }} types of pokémons</h5>
+        <p-chart type="doughnut" [data]="types" [options]="" />
       </div>
     </div>
 

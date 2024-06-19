@@ -44,7 +44,9 @@ export class PokeHttpService {
         }
       }),
       catchError((error) => {
-        console.error(`HTTP GET ERROR: ${url}, error: ${error}`);
+        console.error(
+          `GET error calling: ${url}, Status: ${error.status}, Message ${error.message}`
+        );
         throw error;
       })
     ) as Observable<T>;
