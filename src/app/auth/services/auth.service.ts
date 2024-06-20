@@ -69,7 +69,7 @@ export class AuthService {
         } catch (error) {
           reject(error);
         }
-      }, 2000 || this.tokenValidityPeriod);
+      }, this.tokenValidityPeriod);
     });
   }
 

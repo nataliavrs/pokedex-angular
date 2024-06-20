@@ -197,7 +197,7 @@ export class PokeDashboardComponent {
             return of(null);
           }
           return forkJoin(
-            genders.results.map(({ url }) =>
+            (genders.results || []).map(({ url }) =>
               this.pokeHttpService.get<Gender>(url, {}, true).pipe(
                 take(1),
                 map((res) => ({
