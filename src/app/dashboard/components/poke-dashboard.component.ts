@@ -24,7 +24,7 @@ import {
 import { ToasterService } from '../../shared/services/toaster.service';
 import { ChartData } from 'chart.js';
 import { Generation, Gender, DataSet, GenderType } from '../types/charts.type';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'poke-dashboard',
