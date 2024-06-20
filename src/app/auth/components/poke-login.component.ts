@@ -12,6 +12,7 @@ import { login } from '../store/auth.actions';
 import {
   selectIsTokenExpired,
   selectLoggedInStatus,
+  selectUser,
 } from '../store/auth.selectors';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
@@ -45,7 +46,7 @@ export class PokeLoginComponent {
   LABELS = LABELS;
   loginForm: FormGroup;
   isUserLoggedIn$ = this.store.select(selectLoggedInStatus);
-  user!: User;
+  user!: User | null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -55,10 +56,10 @@ export class PokeLoginComponent {
     private toasterService: ToasterService
   ) {
     this.loginForm = this.formBuilder.group({
-      // email: ['', [Validators.required, Validators.email]],
-      // password: ['', Validators.required],
-      email: ['natalia@hiop.it', [Validators.required, Validators.email]],
-      password: ['nubilife', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+      // email: ['natalia@hiop.it', [Validators.required, Validators.email]],
+      // password: ['nubilife', Validators.required],
     });
   }
 
@@ -73,6 +74,13 @@ export class PokeLoginComponent {
             'Token expired, please log in again'
           );
         }
+      });
+
+    this.store
+      .select(selectUser)
+      .pipe(take(1))
+      .subscribe((user) => {
+        this.user = user ? user : null;
       });
   }
 
@@ -98,6 +106,10 @@ export class PokeLoginComponent {
       console.error('Error', error);
       this.toasterService.showErrorMessage(message);
     }
+  }
+
+  handleLoginButtonClick() {
+    this.loginForm.invalid ? '' : this.onSubmit();
   }
 
   onLogOutUser() {

@@ -1,0 +1,87 @@
+.main-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-image: url("/assets/images/background-img.png");
+  background-repeat: repeat;
+}
+
+.box-container {
+  padding: 40px;
+  flex-direction: column;
+  min-height: 80%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  border-radius: 15px;
+  width: 420px;
+  background-color: white;
+  filter: drop-shadow(0 3px 15px rgba(0, 0, 0, 0.3));
+}
+
+.logo-wrapper {
+  display: flex;
+  height: 80px;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    height: 100%;
+  }
+}
+
+.login-form {
+  width: 100%;
+  padding: 15px;
+  box-sizing: border-box;
+
+  .form-field {
+    margin-bottom: 15px;
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    input.ng-invalid.ng-touched {
+      border-color: red;
+    }
+  }
+
+  // .ng-invalid {
+  //   border: solid 1px red;
+  // }
+
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.625em;
+    width: 100%;
+
+    p-button {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      color: white;
+      font-size: 0.875em;
+      cursor: pointer;
+    }
+  }
+}

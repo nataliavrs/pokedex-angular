@@ -37,7 +37,7 @@ export class AuthService {
   logOutUser(): void {
     try {
       // throw new Error('Log out user error');
-      localStorage.removeItem(this.tokenKey);
+      this.clearCache();
       this.store.dispatch(
         login({
           request: { isLoggedIn: false, user: null, isTokenExpired: false },
@@ -58,13 +58,13 @@ export class AuthService {
       setTimeout(() => {
         try {
           // throw new Error('Log out expired token user error');
-          localStorage.removeItem(this.tokenKey);
           this.store.dispatch(
             login({
               request: { isLoggedIn: false, user: null, isTokenExpired: true },
             })
           );
           this.router.navigateByUrl('');
+          this.clearCache();
           resolve();
         } catch (error) {
           reject(error);
@@ -80,5 +80,12 @@ export class AuthService {
   generateLoginToken(): string {
     const randomString = Math.random().toString(36).substring(2);
     return `${randomString}${randomString}`;
+  }
+
+  /**
+   * Clears the local storage
+   */
+  clearCache(): void {
+    localStorage.clear();
   }
 }

@@ -1,38 +1,57 @@
-<h1 class="mt-15">Login</h1>
-<div class="row gap-1">
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div class="row" *ngIf="!(isUserLoggedIn$ | async)">
-      <p-floatLabel>
-        <input
-          [ngClass]="{
-            'ng-invalid': this.loginForm.get('email')?.invalid
-          }"
-          pInputText
-          formControlName="email"
-        />
-        <label for="email">{{ LABELS.COMMON.USERNAME }}</label>
-      </p-floatLabel>
-      <p-floatLabel>
-        <p-password formControlName="password" [toggleMask]="true" />
-        <label for="password">{{ LABELS.COMMON.PASSWORD }}</label>
-      </p-floatLabel>
+<div class="main-container">
+  <div class="box-container">
+    <div class="logo-wrapper">
+      <img src="../../../assets/images/pokemon-logo.png" alt="Logo" />
     </div>
 
-    <div class="mt-15">
-      <p-button
+    <h3 class="mb-15 mt-15">
+      {{
+        (isUserLoggedIn$ | async)
+          ? LABELS.COMMON.LOGGED_IN
+          : LABELS.COMMON.LOG_IN_WELCOME
+      }}
+    </h3>
+
+    <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="inputs" *ngIf="!(isUserLoggedIn$ | async)">
+        <div class="form-field">
+          <label for="email">{{ LABELS.COMMON.USERNAME }}</label>
+          <input pInputText formControlName="email" />
+        </div>
+
+        <div class="form-field">
+          <label for="password">{{ LABELS.COMMON.PASSWORD }}</label>
+          <input type="password" pInputText formControlName="password" />
+        </div>
+      </div>
+
+      <div class="logged-in mb-15">
+        <h4 *ngIf="isUserLoggedIn$ | async">{{ user?.email }}</h4>
+      </div>
+
+      <div
         *ngIf="!(isUserLoggedIn$ | async)"
-        type="submit"
-        label="{{ LABELS.COMMON.LOG_IN }}"
-        [disabled]="this.loginForm.invalid"
+        class="button"
+        (click)="handleLoginButtonClick()"
       >
-      </p-button>
-      <p-button
+        <p-button
+          pButton
+          label="{{ LABELS.COMMON.LOG_IN }}"
+          type="button"
+          [disabled]="this.loginForm.invalid"
+        ></p-button>
+      </div>
+      <div
         *ngIf="isUserLoggedIn$ | async"
-        type="button"
-        label="{{ LABELS.COMMON.LOG_OUT }}"
+        class="button"
         (click)="onLogOutUser()"
       >
-      </p-button>
-    </div>
-  </form>
+        <p-button
+          pButton
+          type="button"
+          label="{{ LABELS.COMMON.LOG_OUT }}"
+        ></p-button>
+      </div>
+    </form>
+  </div>
 </div>
