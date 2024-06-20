@@ -12,7 +12,7 @@ export class ToasterService {
       severity: 'success',
       summary: 'Success',
       detail: message,
-      life: 2000,
+      life: 2500,
     });
   }
 
@@ -21,7 +21,7 @@ export class ToasterService {
       severity: 'error',
       summary: 'Error',
       detail: message,
-      life: 2000,
+      life: 2500,
     });
   }
 
@@ -30,7 +30,7 @@ export class ToasterService {
       severity: 'info',
       summary: 'Info Message',
       detail: message,
-      life: 2000,
+      life: 2500,
     });
   }
 }
