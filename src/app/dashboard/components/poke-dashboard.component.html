@@ -1,44 +1,60 @@
 <div class="container">
+  <!-- Sidebar -->
   <div class="sidebar">
     <nav>
       <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Profile</a></li>
-        <li><a href="#">Settings</a></li>
+        <li>
+          <a [routerLink]="['/dashboard']" routerLinkActive="router-link-active"
+            >Dashboard</a
+          >
+        </li>
+        <li>
+          <a [routerLink]="['/']" routerLinkActive="router-link-active"
+            >Profile</a
+          >
+        </li>
+        <li><a>Pokémons</a></li>
       </ul>
     </nav>
   </div>
 
-  <!-- Gender by generation -->
-  <div class="">
-    <div class="chart">
-      <div *ngIf="pokemonGenderByGenerationsData$ | async as generation">
-        <h3>Pokémons genders per generation</h3>
-        <h5>There are 3 genders of pokémons</h5>
-        <p-chart type="bar" [data]="generation" [options]="" />
-      </div>
+  <div class="charts-container">
+    <!-- Chart: Pokémons per Type -->
+    <div class="chart" *ngIf="pokemonTypesData$ | async as types">
+      <h2>Pokémons per Type</h2>
+      <h5>
+        Explore the diversity of Pokémon by type. This chart displays the total
+        count of Pokémon across
+        {{ types.datasets[0].data.length }} different types, showing the variety
+        and balance of Pokémon types in the universe.
+      </h5>
+      <p-chart type="doughnut" [data]="types" [options]=""></p-chart>
     </div>
-  </div>
 
-  <div class="row justify-center">
-    <!-- Pokémons per type -->
-    <div class="chart">
-      <div *ngIf="pokemonTypesData$ | async as types">
-        <h3>Pokémons per type</h3>
-        <h5>There are {{ types.datasets[0].data.length }} types of pokémons</h5>
-        <p-chart type="doughnut" [data]="types" [options]="" />
-      </div>
+    <!-- Chart: Pokémons per Generation -->
+    <div class="chart" *ngIf="pokemonGenerationsData$ | async as generation">
+      <h2>Pokémons per Generation</h2>
+      <h5>
+        Discover the distribution of Pokémon across the
+        {{ generation.datasets[0].data.length }} generations. This chart
+        visualizes how many Pokémon were introduced in each generation,
+        highlighting the evolution of Pokémon over time.
+      </h5>
+      <p-chart type="bar" [data]="generation" [options]=""></p-chart>
     </div>
-    <!-- Pokémons per generation -->
-    <div class="chart">
-      <div *ngIf="pokemonGenerationsData$ | async as generation">
-        <h3>Pokémons per generation</h3>
-        <h5>
-          There are {{ generation.datasets[0].data.length }} generations of
-          pokémons
-        </h5>
-        <p-chart type="bar" [data]="generation" [options]="" />
-      </div>
+
+    <!-- Chart: Pokémons Genders per Generation -->
+    <div
+      class="chart"
+      *ngIf="pokemonGenderByGenerationsData$ | async as generation"
+    >
+      <h2>Pokémons Genders per Generation</h2>
+      <h5>
+        Analyze the gender distribution of Pokémon within each generation. This
+        chart provides insights into the three recognized genders of Pokémon and
+        how they are represented throughout the different generations.
+      </h5>
+      <p-chart type="bar" [data]="generation" [options]=""></p-chart>
     </div>
   </div>
 </div>

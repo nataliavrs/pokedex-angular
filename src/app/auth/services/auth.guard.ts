@@ -9,13 +9,16 @@ import { take, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthGuard {
-  constructor(private store: Store<PokeState>) {}
+  constructor(private store: Store<PokeState>, private router: Router) {}
 
   canActivate() {
     return this.store.select(selectLoggedInStatus).pipe(
       take(1),
       tap((isLoggedIn) => {
         console.log('Can activate route?', isLoggedIn);
+        if (!isLoggedIn) {
+          this.router.navigateByUrl('');
+        }
         return isLoggedIn;
       })
     );

@@ -24,11 +24,12 @@ import {
 import { ToasterService } from '../../shared/services/toaster.service';
 import { ChartData } from 'chart.js';
 import { Generation, Gender, DataSet, GenderType } from '../types/charts.type';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'poke-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, ChartModule],
+  imports: [CommonModule, FormsModule, ChartModule, RouterLink],
   templateUrl: './poke-dashboard.component.html',
   styleUrl: './poke-dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
