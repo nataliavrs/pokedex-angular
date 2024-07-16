@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './auth/services/auth.guard';
 import { inject } from '@angular/core';
 
-// TODO togliere mock
 export const routes: Routes = [
   {
     path: '',
