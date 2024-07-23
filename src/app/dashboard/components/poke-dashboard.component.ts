@@ -25,6 +25,10 @@ import { ToasterService } from '../../shared/services/toaster.service';
 import { ChartData } from 'chart.js';
 import { Generation, Gender, DataSet, GenderType } from '../types/charts.type';
 import { RouterLink } from '@angular/router';
+import {
+  formatGenerationString,
+  upperCaseFirstLetter,
+} from '../../shared/misc.functions';
 
 @Component({
   selector: 'poke-dashboard',
@@ -53,6 +57,9 @@ export class PokeDashboardComponent {
     this.getPokemonGendersByGenerationData();
   }
 
+  /**
+   * Retrieves the data for the pokemon types and sorts them based on the number of pokemons.
+   */
   getPokemonTypesData(): void {
     // Retrieve types
     this.pokemonTypesData$ = this.pokeHttpService
@@ -90,7 +97,7 @@ export class PokeDashboardComponent {
             .sort((a, b) => b.pokemons.length - a.pokemons.length);
           const data = sortedTypes.map((data) => data.pokemons.length);
           const labels = sortedTypes.map((data) =>
-            this.upperCaseFirstLetter(data.name)
+            upperCaseFirstLetter(data.name)
           );
           const colors = this.generateColors(data.length);
 
@@ -117,6 +124,9 @@ export class PokeDashboardComponent {
       );
   }
 
+  /**
+   * Retrieves the data for the Pokémon generations.
+   */
   getPokemonGenerationsData(): void {
     this.pokemonGenerationsData$ = this.pokeHttpService
       // Retrieve generations
@@ -152,7 +162,7 @@ export class PokeDashboardComponent {
             .sort((a, b) => a.pokemons.length - b.pokemons.length);
           const data = sortRes.map((data) => data.pokemons.length);
           const labels = sortRes.map((data) =>
-            this.formatGenerationString(data.name)
+            formatGenerationString(data.name)
           );
           const colors = this.generateColors(data.length);
 
@@ -178,6 +188,9 @@ export class PokeDashboardComponent {
       );
   }
 
+  /**
+   * Retrieves the data for the pokemon genders by generation, including gender details and generation details. It calculates the gender distribution per generation and generates chart data for visualization.
+   */
   getPokemonGendersByGenerationData(): void {
     this.pokemonGenderByGenerationsData$ = this.pokeHttpService
       // Retrieve genders
@@ -379,7 +392,7 @@ export class PokeDashboardComponent {
           };
           const dataSetsPerGenders: DataSet[] = chartData.genders?.map(
             (gender) => ({
-              label: this.upperCaseFirstLetter(gender || '') || '',
+              label: upperCaseFirstLetter(gender || '') || '',
               data: chartData.genderPerGenerations?.map(
                 (generation) => generation[gender as GenderType]?.length || 0
               ),
@@ -391,9 +404,7 @@ export class PokeDashboardComponent {
           );
 
           return {
-            labels: generationNames.map((gen) =>
-              this.formatGenerationString(gen)
-            ),
+            labels: generationNames.map((gen) => formatGenerationString(gen)),
             datasets: dataSetsPerGenders,
           };
         }),
@@ -410,14 +421,11 @@ export class PokeDashboardComponent {
       );
   }
 
-  formatGenerationString(input: string): string {
-    const parts = input.split('-');
-    const firstPart =
-      parts[0].charAt(0).toUpperCase() + parts[0].slice(1).toLowerCase();
-    const secondPart = parts[1].toUpperCase();
-    return `${firstPart}-${secondPart}`;
-  }
-
+  /**
+   * Generates an array of background and border colors based on the count provided.
+   * @param {number} count - The number of colors to generate.
+   * @return {{ backgroundColor: string[]; borderColor: string[]; }} The generated background and border colors.
+   */
   generateColors(count: number): {
     backgroundColor: string[];
     borderColor: string[];
@@ -432,9 +440,5 @@ export class PokeDashboardComponent {
     }
 
     return { backgroundColor, borderColor };
-  }
-
-  upperCaseFirstLetter(name: string): string {
-    return name.slice(0, 1).toLocaleUpperCase() + name.slice(1).toLowerCase();
   }
 }
